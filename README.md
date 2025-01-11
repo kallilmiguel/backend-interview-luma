@@ -27,27 +27,22 @@ The scoring logic is the heart of the application and determines the rank of pat
   - Latitude and longitude of the facility where the appointment will take place.
 
 ### **2. Normalization**
-Each measure is normalized to scale its values between 0 and 1:
+Each measure is normalized to scale its values between 0 and 1. All max values were calculated using the maximum value of the dataset, except the distance measure, which was used the [Antipodal Distance](https://knowledge-enrichment.quora.com/https-www-quora-com-What-is-the-longest-distance-between-any-two-places-on-earth-answer-Rachna-Sharma-623#:~:text=The%20longest%20distance%20between%20any%20two%20places%20on%20Earth%20is%2C%20and%20it%20occurs%20betw%E2%80%A6):
+
 - **Age**: Directly proportional to the score.
-  \[
-  \text{normalizedAge} = \frac{\text{patient.age}}{\text{maxValues.age}}
-  \]
+  - $$normalizedAge = \frac{patientAge}{maxAge}$$
+  
 - **Distance**: Inversely proportional to the score.
-  \[
-  \text{normalizedDistance} = 1 - \frac{\text{distance}}{\text{maxValues.distance}}
-  \]
+  - $$normalizedDistance = \frac{patientDistance}{antipodalDistance}$$
+  
 - **Accepted Offers**: Directly proportional to the score.
-  \[
-  \text{normalizedAcceptedOffers} = \frac{\text{patient.acceptedOffers}}{\text{maxValues.acceptedOffers}}
-  \]
+  - $$normalizedAcceptedOffers = \frac{acceptedOffers}{maxAcceptedOffers}$$
+  
 - **Canceled Offers**: Inversely proportional to the score.
-  \[
-  \text{normalizedCanceledOffers} = 1 - \frac{\text{patient.canceledOffers}}{\text{maxValues.canceledOffers}}
-  \]
+  - $$normalizedCancelledOffers = \frac{patientCancelledOffers}{maxCancelledOffers}$$
+  
 - **Reply Time**: Inversely proportional to the score.
-  \[
-  \text{normalizedReplyTime} = 1 - \frac{\text{patient.averageReplyTime}}{\text{maxValues.replyTime}}
-  \]
+  - $$normalizedReplyTime = \frac{patientReplyTime}{maxReplyTime}$$
 
 ### **3. Weighted Scoring**
 Each normalized value is multiplied by its weight to contribute to the final score:
@@ -59,15 +54,11 @@ Each normalized value is multiplied by its weight to contribute to the final sco
   - Reply Time: 20%
 
 The final raw score is calculated as:
-\[
-\text{rawScore} = (\text{normalizedAge} \cdot \text{ageWeight}) + (\text{normalizedDistance} \cdot \text{distanceWeight}) + (\text{normalizedAcceptedOffers} \cdot \text{acceptedOffersWeight}) + (\text{normalizedCanceledOffers} \cdot \text{canceledOffersWeight}) + (\text{normalizedReplyTime} \cdot \text{replyTimeWeight})
-\]
+  $$\text{rawScore} = (\text{normalizedAge} \cdot \text{ageWeight}) + (\text{normalizedDistance} \cdot \text{distanceWeight}) + (\text{normalizedAcceptedOffers} \cdot \text{acceptedOffersWeight}) + (\text{normalizedCanceledOffers} \cdot \text{canceledOffersWeight}) +     (\text{normalizedReplyTime} \cdot \text{replyTimeWeight})$$
 
 ### **4. Scaling**
 The raw score is scaled to the range \([1, 10]\) using the rule of three:
-\[
-\text{scaledScore} = 1 + (\text{rawScore} \cdot 9)
-\]
+  $$\text{scaledScore} = 1 + (\text{rawScore} \cdot 9)$$
 
 ---
 
@@ -105,28 +96,28 @@ DTOs are used to validate the structure and constraints of incoming data:
 ### **POST /patients**
 Processes the patient list and returns the top 10 candidates based on their scores.
 
-#### Request
+#### Request Body
 ```json
 {
     "location": {
-        "lat": 46.0,
-        "long": -65.0
+        "lat": 15.0,
+        "long": -20.0
     }
 }
 ```
 
-#### Response
+#### Response Body
 ```json
 [
     {
-        "id": "123",
-        "name": "John Doe",
-        "score": "9.34"
+        "id": "f7f4b340-7944-4f4f-bcba-30b9d7bf4c2a",
+        "name": "Adeline Corwin",
+        "score": "9.14"
     },
     {
-        "id": "124",
-        "name": "Jane Smith",
-        "score": "8.75"
+        "id": "213097a3-cae1-48cf-b266-a361a972ff27",
+        "name": "Tamara Roberts",
+        "score": "9.13"
     },
     ...
 ]
@@ -160,20 +151,11 @@ curl -X POST http://localhost:3000/patients \
 -H "Content-Type: application/json" \
 -d '{
     "location": {
-        "lat": 46.0,
-        "long": -65.0
+        "lat": 15.0,
+        "long": -20.0
     }
 }'
 ```
 
 ---
-
-## **Future Enhancements**
-- Add more detailed unit tests for edge cases.
-- Include logging for better debugging.
-- Optimize performance for large datasets.
-
----
-
-This `README.md` provides a detailed explanation of the scoring function and a high-level overview of the remaining components.
 
