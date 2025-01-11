@@ -159,3 +159,49 @@ curl -X POST http://localhost:3000/patients \
 
 ---
 
+### **Run Unit Tests**
+To execute the tests, run the following command:
+```bash
+npm test
+```
+
+### **Test Coverage**
+The tests cover the following aspects:
+
+#### **1. Distance Calculation (`utils.test.js`)**
+This test ensures that the `calculateDistance` function correctly computes the Haversine distance between two locations.
+
+#### **2. Scoring Logic (`scoring.test.js`)**
+This test validates the scoring process and ensures that patients are correctly sorted based on their scores. It also tests edge cases such as invalid data.
+
+
+---
+
+
+## **Dockerization**
+
+A `Dockerfile` is provided to containerize the application.
+
+### **Build the Docker Image**
+To build the Docker image, run:
+```bash
+docker build -t patient-prioritization-api .
+```
+
+### **Run the Docker Container**
+To run the application inside a Docker container:
+```bash
+docker run -p 3000:3000 patient-prioritization-api
+```
+
+### **Stop the Container**
+To stop the running container, first find its container ID:
+```bash
+docker ps
+```
+Then stop it using:
+```bash
+docker stop <container-id>
+```
+
+---
