@@ -168,7 +168,7 @@ npm test
 ### **Test Coverage**
 The tests cover the following aspects:
 
-#### **1. Distance Calculation (`utils.test.js`)**
+#### **1. Distance Calculation (`distance.test.js`)**
 This test ensures that the `calculateDistance` function correctly computes the Haversine distance between two locations.
 
 #### **2. Scoring Logic (`scoring.test.js`)**
