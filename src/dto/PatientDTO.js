@@ -26,6 +26,30 @@ class PatientDTO {
             });
         }
 
+        if (typeof patientInstance.acceptedOffers !== "number" || patientInstance.acceptedOffers < 0) {
+            errors.push({
+                property: "acceptedOffers",
+                constraints: { min: "acceptedOffers must not be less than 0" },
+                value: patientInstance.acceptedOffers,
+            });
+        }
+
+        if (typeof patientInstance.canceledOffers !== "number" || patientInstance.canceledOffers < 0) {
+            errors.push({
+                property: "canceledOffers",
+                constraints: { min: "canceledOffers must not be less than 0" },
+                value: patientInstance.canceledOffers,
+            });
+        }
+
+        if (typeof patientInstance.averageReplyTime !== "number" || patientInstance.averageReplyTime < 0) {
+            errors.push({
+                property: "averageReplyTime",
+                constraints: { min: "averageReplyTime must not be less than 0" },
+                value: patientInstance.acceptedOffers,
+            });
+        }
+
         if (errors.length > 0) {
             console.error(errors);
             throw new Error(`Validation failed: ${JSON.stringify(errors)}`);
